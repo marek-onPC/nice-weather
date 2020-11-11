@@ -7,7 +7,7 @@
     <router-link to="sevendays" class="mdl-tabs__tab" @click="activeTab = 4" :class="{'is-tab-active': activeTab == 4}">Next seven days</router-link>
   </nav>
   <div class="mdl-tabs__panel">
-    <router-view v-slot="{ Component }">
+    <router-view v-slot="{ Component }" :city="city">
       <transition name="fade" mode="out-in">
       <component :is="Component" />
       </transition>

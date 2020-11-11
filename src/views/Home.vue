@@ -1,9 +1,9 @@
 <template>
-  <HeroImage/>
+  <HeroImage :city="cityToCheck"/>
   <div class="main-wrapper">
     <div class="main-inner">
       <Search @search-city="searchCity"/>
-      <Tabs :city="visitorCity"/>
+      <Tabs :city="cityToCheck"/>
     </div>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default {
   },
   data () {
     return {
-      visitorCity: ''
+      cityToCheck: ''
     }
   },
   methods: {
@@ -39,11 +39,11 @@ export default {
     },
     setVisitorIp () {
       this.getVisitorData().then(data => {
-        this.visitorCity = data.city
+        this.cityToCheck = data.city
       })
     },
     searchCity (value) {
-      this.visitorCity = value
+      this.cityToCheck = value
     }
   },
   created () {

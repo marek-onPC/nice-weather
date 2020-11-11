@@ -9,7 +9,7 @@ const axios = require('axios').default
 
 export default {
   name: 'Today',
-  props: ['visitorCity'],
+  props: ['city'],
   methods: {
     getWeatherToday (city) {
       return axios.get('http://api.ipstack.com/check?access_key=')
@@ -22,7 +22,7 @@ export default {
     }
   },
   created () {
-    console.log('elo')
+    console.log(this.city)
   }
 }
 </script>

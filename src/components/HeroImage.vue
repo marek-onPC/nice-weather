@@ -6,7 +6,11 @@
 
 <script>
 export default {
-  name: 'HeroImage'
+  name: 'HeroImage',
+  props: ['city'],
+  methods: {
+    // Here get the time and set proper image to time of a day
+  }
 }
 </script>
 
