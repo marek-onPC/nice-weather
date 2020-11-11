@@ -1,7 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-import World from '../components/tabs/World.vue'
-import Europe from '../components/tabs/Europe.vue'
+import Now from '../components/tabs/Now.vue'
+import Today from '../components/tabs/Today.vue'
+import Tomorrow from '../components/tabs/Tomorrow.vue'
+import SevenDays from '../components/tabs/SevenDays.vue'
 
 const routes = [
   {
@@ -9,8 +11,10 @@ const routes = [
     name: 'Home',
     component: Home,
     children: [
-      { path: '', name: 'World', component: World },
-      { path: '/europe', name: 'Europe', component: Europe }
+      { path: '', name: 'Now', component: Now },
+      { path: '/today', name: 'Today', component: Today },
+      { path: '/tomorrow', name: 'Tomorrow', component: Tomorrow },
+      { path: '/sevendays', name: 'SevenDays', component: SevenDays }
     ]
   },
   {

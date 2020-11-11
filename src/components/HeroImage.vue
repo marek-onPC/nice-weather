@@ -13,10 +13,11 @@ export default {
 <style lang="scss" scoped>
 .hero {
   &-wrapper {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: -1;
+    width: 100%;
 
     &::after {
       content: '';

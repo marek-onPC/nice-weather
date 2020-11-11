@@ -19,6 +19,7 @@ export default {
     searchNameInputed:
       debounce(function () {
         console.log(this.searchCity)
+        this.$emit('search-city', this.searchCity)
       }, 500)
   }
 }

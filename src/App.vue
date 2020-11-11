@@ -12,7 +12,20 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #333;
-  margin: 0 50px;
+  margin: 0 10px;
+  max-width: 1200px;
+
+  @media (min-width: 576px) {
+    margin: 0 40px;
+  }
+
+  @media (min-width: 768px) {
+    margin: 0 100px;
+  }
+
+  @media (min-width: 1200px) {
+    margin: 0 auto;
+  }
 }
 
 #nav {

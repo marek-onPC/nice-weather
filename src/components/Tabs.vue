@@ -1,8 +1,10 @@
 <template>
 <div class="mdl-tabs">
   <nav class="mdl-tabs__tab-bar">
-    <router-link to="/" class="mdl-tabs__tab" @click="activeTab = 1" :class="{'is-tab-active': activeTab == 1}">World</router-link>
-    <router-link to="europe" class="mdl-tabs__tab" @click="activeTab = 2" :class="{'is-tab-active': activeTab == 2}">Europe</router-link>
+    <router-link to="/" class="mdl-tabs__tab" @click="activeTab = 1" :class="{'is-tab-active': activeTab == 1}">Now</router-link>
+    <router-link to="today" class="mdl-tabs__tab" @click="activeTab = 2" :class="{'is-tab-active': activeTab == 2}">Today</router-link>
+    <router-link to="tomorrow" class="mdl-tabs__tab" @click="activeTab = 3" :class="{'is-tab-active': activeTab == 3}">Tomorrow</router-link>
+    <router-link to="sevendays" class="mdl-tabs__tab" @click="activeTab = 4" :class="{'is-tab-active': activeTab == 4}">Next seven days</router-link>
   </nav>
   <div class="mdl-tabs__panel">
     <router-view v-slot="{ Component }">
@@ -17,6 +19,7 @@
 <script>
 export default {
   name: 'Tabs',
+  props: ['city'],
   data () {
     return {
       activeTab: 1
@@ -27,11 +30,27 @@ export default {
 
 <style lang="scss" scoped>
 .mdl-tabs {
-  margin-top: 50px;
+  margin-top: 150px;
+
+  @media (min-width: 768px) {
+    margin-top: 50px;
+  }
+
+  &__tab {
+    padding: 0 12px;
+
+    @media (min-width: 768px) {
+      padding: 0 24px;
+    }
+  }
 
   &__tab-bar {
-    justify-content: flex-start;
-    padding-left: 50px;
+    flex-wrap: wrap-reverse;
+
+    @media (min-width: 768px) {
+      justify-content: flex-start;
+      padding-left: 50px;
+    }
   }
 
   &__panel {
@@ -49,13 +68,9 @@ export default {
 .mdl-tabs__tab {
   color: #fff;
   font-weight: 800;
-  border-top: 1px solid #fff;
-  border-left: 1px solid #fff;
+  border: 1px solid #fff;
+  border-bottom: none;
   transition: all 0.15s cubic-bezier(.4,0,1,1);
-
-  &:first-of-type {
-    border-left: none;
-  }
 
   &::after {
     height: 2px;
