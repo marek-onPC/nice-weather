@@ -1,11 +1,32 @@
 <template>
   <div>
-    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
     {{ weatherData }}
+    <div class="weather-now__outer">
+      <div class="weather-now__wrapper-left">
+        <div class="weather-now__title">
+          <h2>{{ city[0] }}</h2>
+          <p>{{ city[1] }}</p>
+          <p>{{ city[2] }}</p>
+        </div>
+        <div class="weather-now__description">
+          <img v-if="weatherData.current.weather[0].icon !== ''" :src="'http://openweathermap.org/img/wn/' +  weatherData.current.weather[0].icon + '@2x.png'" alt="">
+          <p>{{ weatherData.current.weather[0].description }}</p>
+        </div>
+        <div class="weather-now__temperature">
+          <h4>Temperature: </h4>
+          <h4>Feels like: </h4>
+        </div>
+      </div>
+      <div class="weather-now__wrapper-right">
+
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import debounce from 'lodash.debounce'
+
 const axios = require('axios').default
 
 export default {
@@ -13,12 +34,21 @@ export default {
   props: ['city'],
   data () {
     return {
-      weatherData: 'x'
+      weatherData: {
+        current: {
+          weather: [
+            {
+              icon: '',
+              description: ''
+            }
+          ]
+        }
+      }
     }
   },
   methods: {
     getWeather () {
-      return axios.get('http://api.openweathermap.org/data/2.5/weather?q=' + this.city + '&appid=')
+      return axios.get('https://api.openweathermap.org/data/2.5/onecall?lat=' + this.city[1] + '&lon=' + this.city[2] + '&exclude=minutely,hourly,daily&units=metric&appid=')
         .then(function (response) {
           console.log(response.data)
           return response.data
@@ -33,10 +63,15 @@ export default {
       })
     }
   },
-  watch: {
-    city: function () {
+  created () {
+    debounce(function () {
       this.setWeather()
-    }
+    }, 500)
+  },
+  watch: {
+    city: debounce(function () {
+      this.setWeather()
+    }, 500)
   }
 }
 </script>

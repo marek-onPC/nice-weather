@@ -3,7 +3,7 @@
   <div class="main-wrapper">
     <div class="main-inner">
       <Search @search-city="searchCity"/>
-      <Tabs :city="cityToCheck"/>
+      <Tabs :city="[visitorCity, visitorCityLat, visitorCityLon]"/>
     </div>
   </div>
 </template>
@@ -24,7 +24,9 @@ export default {
   },
   data () {
     return {
-      cityToCheck: ''
+      visitorCity: '',
+      visitorCityLat: '',
+      visitorCityLon: ''
     }
   },
   methods: {
@@ -37,17 +39,37 @@ export default {
           console.log(error)
         })
     },
-    setVisitorIp () {
+    setVisitorCity () {
       this.getVisitorData().then(data => {
-        this.cityToCheck = data.city
+        this.visitorCity = data.city
+      })
+    },
+    getVisitorLatLon () {
+      return axios.get('http://api.openweathermap.org/data/2.5/weather?q=' + this.visitorCity + '&units=metric&appid=')
+        .then(function (response) {
+          return response.data
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    setVisitorLatLon () {
+      this.getVisitorLatLon().then(data => {
+        this.visitorCityLat = data.coord.lat
+        this.visitorCityLon = data.coord.lon
       })
     },
     searchCity (value) {
-      this.cityToCheck = value
+      this.visitorCity = value
     }
   },
   created () {
-    this.setVisitorIp()
+    this.setVisitorCity()
+  },
+  watch: {
+    visitorCity: function () {
+      this.setVisitorLatLon()
+    }
   }
 }
 </script>
