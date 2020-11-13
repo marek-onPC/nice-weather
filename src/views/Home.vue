@@ -3,7 +3,7 @@
   <div class="main-wrapper">
     <div class="main-inner">
       <Search @search-city="searchCity"/>
-      <Tabs :city="[visitorCity, visitorCityLat, visitorCityLon]"/>
+      <Tabs :city="[visitorCity, visitorCityLat, visitorCityLon, weatherAPI]"/>
     </div>
   </div>
 </template>
@@ -26,12 +26,14 @@ export default {
     return {
       visitorCity: '',
       visitorCityLat: '',
-      visitorCityLon: ''
+      visitorCityLon: '',
+      ipAPI: '',
+      weatherAPI: ''
     }
   },
   methods: {
     getVisitorData () {
-      return axios.get('http://api.ipstack.com/check?access_key=')
+      return axios.get('http://api.ipstack.com/check?access_key=' + this.ipAPI)
         .then(function (response) {
           return response.data
         })
@@ -45,7 +47,7 @@ export default {
       })
     },
     getVisitorLatLon () {
-      return axios.get('http://api.openweathermap.org/data/2.5/weather?q=' + this.visitorCity + '&units=metric&appid=')
+      return axios.get('http://api.openweathermap.org/data/2.5/weather?q=' + this.visitorCity + '&units=metric&appid=' + this.weatherAPI)
         .then(function (response) {
           return response.data
         })

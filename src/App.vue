@@ -11,7 +11,7 @@
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #333;
+  color: #232323;
   margin: 0 10px;
   max-width: 1200px;
 
