@@ -30,7 +30,6 @@ export default {
   max-width: 600px;
   width: 100%;
   height: 73px;
-  margin-top: 75px;
 
   &__input {
     font-weight: 700;

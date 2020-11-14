@@ -8,8 +8,8 @@
           <p>Lon: {{ city[2] }}</p>
         </div>
         <div class="weather-card-image mdl-card mdl-shadow--2dp">
-          <div class="mdl-card__title mdl-card--expand">
-            <img v-if="weatherData.weather[0].icon !== ''" :src="'http://openweathermap.org/img/wn/' +  weatherData.weather[0].icon + '@2x.png'" alt="">
+          <div class="mdl-card__title mdl-card--expand" :style="{ backgroundImage: 'url(' + require('@/assets/images/' + weatherData.weather[0].icon + '.jpg') + ')' }">
+            <!-- <img v-if="weatherData.weather[0].icon !== ''" :src="'http://openweathermap.org/img/wn/' +  weatherData.weather[0].icon + '@2x.png'" alt=""> -->
           </div>
           <div class="mdl-card__actions">
             <span class="weather-card-image__filename">
@@ -25,14 +25,16 @@
         </div>
       </div>
       <div class="weather-now__wrapper-right">
-        <h5 class="weather-now__time">Current time: <strong>{{ weatherData.main.humidity }} </strong></h5>
-        <div class="weather-now__minmax-temp">
-          <h5>Temp. min: <strong>{{ weatherData.main.temp_min }} °C</strong></h5>
-          <h5>Temp. max: <strong>{{ weatherData.main.temp_max }} °C</strong></h5>
+        <div class="weather-now__inner-right">
+          <h5 class="weather-now__time">Current time: <strong>{{ formattedCurrentTime }} </strong></h5>
+          <div class="weather-now__minmax-temp">
+            <h5>Temp. min: <strong>{{ weatherData.main.temp_min }} °C</strong></h5>
+            <h5>Temp. max: <strong>{{ weatherData.main.temp_max }} °C</strong></h5>
+          </div>
+          <h5>Humidity: <strong>{{ weatherData.main.humidity }} %</strong></h5>
+          <h5>Pressure: <strong>{{ weatherData.main.pressure }} hPa</strong></h5>
+          <h5>Wind: <strong>{{ weatherData.wind.speed }} m/s</strong></h5>
         </div>
-        <h5>Humidity: <strong>{{ weatherData.main.humidity }} %</strong></h5>
-        <h5>Pressure: <strong>{{ weatherData.main.pressure }} hPa</strong></h5>
-        <h5>Wind: <strong>{{ weatherData.wind.speed }} m/s</strong></h5>
       </div>
     </div>
     <div class="weather-now__maps">
@@ -53,7 +55,7 @@ export default {
       weatherData: {
         weather: [
           {
-            icon: '',
+            icon: '01d',
             description: ''
           }
         ],
@@ -66,7 +68,8 @@ export default {
         wind: {
           speed: ''
         }
-      }
+      },
+      formattedCurrentTime: ''
     }
   },
   methods: {
@@ -83,6 +86,10 @@ export default {
     setWeather () {
       this.getWeather().then(data => {
         this.weatherData = data
+        var currentTime = new Date(new Date().getTime() + (data.timezone * 1000))
+        var currentTimeHours = currentTime.getHours()
+        var currentTimeMinutes = '0' + currentTime.getMinutes()
+        this.formattedCurrentTime = currentTimeHours + ':' + currentTimeMinutes.substr(-2)
       })
     }
   },
@@ -101,28 +108,52 @@ export default {
 .weather-now {
   &__outer {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    margin: 0 150px;
+    margin: 0;
+
+    @media (min-width: 576px) {
+      margin: 0;
+    }
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      margin: 0;
+    }
+
+    @media (min-width: 1200px) {
+      margin: 0 125px;
+    }
+
   }
 
   &__wrapper-left {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 50%;
+    width: 100%;
+
+    @media (min-width: 768px) {
+      width: 50%;
+    }
   }
 
   &__title {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(0,0,0,.1);
 
     h2 {
       width: 100%;
       text-align: center;
       height: 48px;
+      font-size: 38px;
       font-weight: 800;
+
+      @media (min-width: 768px) {
+        font-size: 45px;
+      }
     }
 
     p {
@@ -153,11 +184,10 @@ export default {
 
   &__minmax-temp {
     width: 100%;
-    text-align: end;
     margin-bottom: 25px;
+    text-align: center;
 
-    h5 {
-      width: 100%;
+    @media (min-width: 768px) {
       text-align: end;
     }
   }
@@ -167,12 +197,27 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 50%;
+    width: 100%;
+
+    @media (min-width: 768px) {
+      width: 50%;
+    }
 
     h5 {
       width: 100%;
-      text-align: end;
+      text-align: center;
+
+      @media (min-width: 768px) {
+        text-align: end;
+      }
     }
+  }
+
+  &__inner-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -180,11 +225,13 @@ export default {
   &.mdl-card {
     width: 250px;
     height: 150px;
+    margin: 25px 0;
   }
 
   .mdl-card__title {
-    justify-content: center!important;
-    background: rgba(0, 0, 0, 0.15);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 
   .mdl-card__actions {

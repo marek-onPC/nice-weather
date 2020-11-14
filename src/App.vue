@@ -1,4 +1,6 @@
 <template>
+    <router-link to="/" class="mdl-tabs__tab">Now</router-link>
+    <router-link to="/about" class="mdl-tabs__tab">Today</router-link>
   <router-view/>
 </template>
 
@@ -12,19 +14,19 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #232323;
-  margin: 0 10px;
+  margin: 25px 10px;
   max-width: 1200px;
 
   @media (min-width: 576px) {
-    margin: 0 40px;
+    margin: 25px 40px;
   }
 
   @media (min-width: 768px) {
-    margin: 0 100px;
+    margin: 50px 100px;
   }
 
   @media (min-width: 1200px) {
-    margin: 0 auto;
+    margin: 50px auto;
   }
 }
 

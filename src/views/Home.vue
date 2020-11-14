@@ -27,8 +27,8 @@ export default {
       visitorCity: '',
       visitorCityLat: '',
       visitorCityLon: '',
-      ipAPI: '',
-      weatherAPI: ''
+      ipAPI: '8a009f2246c5cce50f469dac05b69485',
+      weatherAPI: '75f9685f116b28f3c9b5ad6246d906ae'
     }
   },
   methods: {

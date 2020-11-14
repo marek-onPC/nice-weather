@@ -6,7 +6,7 @@
     <router-link to="tomorrow" class="mdl-tabs__tab" @click="activeTab = 3" :class="{'is-tab-active': activeTab == 3}">Tomorrow</router-link>
     <router-link to="sevendays" class="mdl-tabs__tab" @click="activeTab = 4" :class="{'is-tab-active': activeTab == 4}">Next seven days</router-link>
   </nav>
-  <div class="mdl-tabs__panel">
+  <div class="mdl-tabs__panel mdl-shadow--2dp">
     <router-view v-slot="{ Component }" :city="city">
       <transition name="fade" mode="out-in">
       <component :is="Component" />
@@ -30,7 +30,7 @@ export default {
 
 <style lang="scss" scoped>
 .mdl-tabs {
-  margin-top: 150px;
+  margin-top: 85px;
 
   @media (min-width: 768px) {
     margin-top: 50px;
@@ -47,6 +47,10 @@ export default {
   &__tab-bar {
     flex-wrap: wrap-reverse;
 
+    @media (min-width: 576px) {
+      flex-wrap: nowrap;
+    }
+
     @media (min-width: 768px) {
       justify-content: flex-start;
       padding-left: 50px;
@@ -55,7 +59,7 @@ export default {
 
   &__panel {
     min-height: 250px;
-    padding: 50px;
+    padding: 50px 25px;
     background-color: rgba(255, 255, 255, 0.7);
 
     ul, ol {
