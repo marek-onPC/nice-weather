@@ -1,6 +1,6 @@
 <template>
   <div class="hero-wrapper">
-    <img class="hero-image" src="../assets/images/night.jpg" alt="">
+    <img class="hero-image" src="../assets/images/morning.jpg" alt="">
   </div>
 </template>
 

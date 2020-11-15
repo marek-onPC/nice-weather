@@ -1,5 +1,4 @@
 <template>
-  <HeroImage :city="cityToCheck"/>
   <div class="main-wrapper">
     <div class="main-inner">
       <Search @search-city="searchCity"/>
@@ -11,7 +10,6 @@
 <script>
 // @ is an alias to /src
 import Search from '@/components/Search.vue'
-import HeroImage from '@/components/HeroImage.vue'
 import Tabs from '@/components/Tabs.vue'
 const axios = require('axios').default
 
@@ -19,7 +17,6 @@ export default {
   name: 'Home',
   components: {
     Search,
-    HeroImage,
     Tabs
   },
   data () {
@@ -63,10 +60,18 @@ export default {
     },
     searchCity (value) {
       this.visitorCity = value
+    },
+    refreshMDL () {
+      if (typeof componentHandler !== 'undefined') {
+        window.componentHandler.upgradeAllRegistered()
+      }
     }
   },
   created () {
     this.setVisitorCity()
+  },
+  mounted () {
+    this.refreshMDL()
   },
   watch: {
     visitorCity: function () {

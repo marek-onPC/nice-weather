@@ -1,8 +1,45 @@
 <template>
-    <router-link to="/" class="mdl-tabs__tab">Now</router-link>
-    <router-link to="/about" class="mdl-tabs__tab">Today</router-link>
-  <router-view/>
+  <HeroImage :city="cityToCheck"/>
+  <nav class="app-nav__bar">
+    <router-link to="/" class="app-nav__link" :class="{'router-link-exact-active' : weatherPageButton == 1}">
+      <button class="mdl-button mdl-button--nav mdl-js-button mdl-js-ripple-effect">
+        Weather
+      </button>
+    </router-link>
+    <router-link to="/about" class="app-nav__link">
+      <button class="mdl-button mdl-button--nav mdl-js-button mdl-js-ripple-effect">
+        About
+      </button>
+    </router-link>
+  </nav>
+    <transition name="fade" mode="out-in">
+      <router-view/>
+    </transition>
 </template>
+
+<script>
+import HeroImage from '@/components/HeroImage.vue'
+
+export default {
+  components: {
+    HeroImage
+  },
+  data () {
+    return {
+      weatherPageButton: 0
+    }
+  },
+  watch: {
+    $route: function () {
+      if (this.$route.path !== '/about') {
+        this.weatherPageButton = 1
+      } else {
+        this.weatherPageButton = 0
+      }
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 * {
@@ -13,12 +50,13 @@
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
   color: #232323;
-  margin: 25px 10px;
+  margin: 50px 10px;
   max-width: 1200px;
 
   @media (min-width: 576px) {
-    margin: 25px 40px;
+    margin: 50px 40px;
   }
 
   @media (min-width: 768px) {
@@ -30,16 +68,44 @@
   }
 }
 
-#nav {
-  padding: 30px;
+.app-nav {
+  &__bar {
+    position: absolute;
+    top: -26px;
+    right: 0;
+  }
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+  &__link {
+    height: 100%;
+
+    .mdl-button--nav {
+      color: #fff;
+      font-weight: 800;
+      height: 26px;
+      line-height: 26px;
+    }
 
     &.router-link-exact-active {
-      color: #42b983;
+      display: none;
     }
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.25s;
+  transition-property: all;
+  transition-timing-function: ease-in;
+}
+
+.fade-enter-active {
+  transition-delay: .25s;
+}
+
+.fade-enter-from,
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+  transform: translateX(15px);
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
 <div class="mdl-tabs">
   <nav class="mdl-tabs__tab-bar">
-    <router-link to="/" class="mdl-tabs__tab" @click="activeTab = 1" :class="{'is-tab-active': activeTab == 1}">Now</router-link>
-    <router-link to="today" class="mdl-tabs__tab" @click="activeTab = 2" :class="{'is-tab-active': activeTab == 2}">Today</router-link>
-    <router-link to="tomorrow" class="mdl-tabs__tab" @click="activeTab = 3" :class="{'is-tab-active': activeTab == 3}">Tomorrow</router-link>
-    <router-link to="sevendays" class="mdl-tabs__tab" @click="activeTab = 4" :class="{'is-tab-active': activeTab == 4}">Next seven days</router-link>
+    <router-link to="/" class="mdl-tabs__tab">Now</router-link>
+    <router-link to="today" class="mdl-tabs__tab">Today</router-link>
+    <router-link to="tomorrow" class="mdl-tabs__tab">Tomorrow</router-link>
+    <router-link to="sevendays" class="mdl-tabs__tab">Next seven days</router-link>
   </nav>
   <div class="mdl-tabs__panel mdl-shadow--2dp">
     <router-view v-slot="{ Component }" :city="city">
@@ -89,7 +89,7 @@ export default {
   }
 }
 
-.is-tab-active {
+.router-link-exact-active {
   color: #fff;
   background-color: rgba(255, 255, 255, 0.25);
 

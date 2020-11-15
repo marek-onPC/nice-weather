@@ -67,7 +67,8 @@ export default {
         },
         wind: {
           speed: ''
-        }
+        },
+        timezone: ''
       },
       formattedCurrentTime: ''
     }
@@ -86,7 +87,7 @@ export default {
     setWeather () {
       this.getWeather().then(data => {
         this.weatherData = data
-        var currentTime = new Date(new Date().getTime() + (data.timezone * 1000))
+        var currentTime = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60000 + data.timezone * 1000)
         var currentTimeHours = currentTime.getHours()
         var currentTimeMinutes = '0' + currentTime.getMinutes()
         this.formattedCurrentTime = currentTimeHours + ':' + currentTimeMinutes.substr(-2)
