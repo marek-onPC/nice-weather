@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="weather-now__outer">
+    <main class="weather-now__outer">
       <div class="weather-now__wrapper-left">
         <div class="weather-now__title">
           <h2>{{ city[0] }}</h2>
@@ -36,7 +36,7 @@
           <h5>Wind: <strong>{{ weatherData.wind.speed }} m/s</strong></h5>
         </div>
       </div>
-    </div>
+    </main>
     <div class="weather-now__maps">
     </div>
   </div>
@@ -105,7 +105,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .weather-now {
   &__outer {
     display: flex;

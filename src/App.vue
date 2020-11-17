@@ -53,7 +53,7 @@ export default {
   position: relative;
   color: #232323;
   margin: 50px 10px;
-  max-width: 1200px;
+  max-width: 1000px;
 
   @media (min-width: 576px) {
     margin: 50px 40px;
