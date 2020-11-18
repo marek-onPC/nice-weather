@@ -9,22 +9,35 @@
       <div class="weather-today__inner">
         <div class="weather-today__cards">
           <section class="mdl-card-today-card-square" v-for="(hour, index) in weatherData.hourly" :key="hour">
-            <div class="mdl-card mdl-shadow--2dp" v-if="(index % 3 == 0)">
+            <div class="mdl-card mdl-shadow--2dp" v-if="(index % 2 == 0)">
               <div class="mdl-card__title mdl-card--expand" :style="{ backgroundImage: 'url(' + require('@/assets/images/' + hour.weather[0].icon + '.jpg') + ')' }">
               </div>
-              <div class="mdl-card__supporting-text">
-                <p>{{ hour.dt }}</p>
-              </div>
+                <div class="mdl-card__supporting-text" v-if="activeOption == 1">
+                    <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
+                    <p>Temperature: <strong>{{ hour.temp }}</strong></p>
+                    <p>Feels like: <strong>{{ hour.feels_like }}</strong></p>
+                </div>
+                <div class="mdl-card__supporting-text" v-if="activeOption == 2">
+                    <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
+                    <p>Pressure: <strong>{{ hour.pressure }}</strong></p>
+                    <p>Humidity: <strong>{{ hour.humidity }}</strong></p>
+                </div>
+                <div class="mdl-card__supporting-text" v-if="activeOption == 3">
+                    <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
+                    <p>Wind speed: <strong>{{ hour.wind_speed }}</strong></p>
+                    <p>Rain: <strong>{{ hour.rain }}</strong></p>
+                    <p>Clouds: <strong>{{ hour.humidity }}</strong></p>
+                </div>
             </div>
           </section>
         </div>
         <div class="weather-today__settings">
-          <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
-            Temperature
-          </button>
-          <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
-            Wind
-          </button>
+          <nav class="mdl-tabs__tab-bar mdl-tabs--today">
+            <div class="mdl-tabs__tab" @click="activeOption = 1" :class="{'mdl-tabs__tab--active' : activeOption == 1 }">Temperature</div>
+            <div class="mdl-tabs__tab" @click="activeOption = 2" :class="{'mdl-tabs__tab--active' : activeOption == 2 }">Air</div>
+            <div class="mdl-tabs__tab" @click="activeOption = 3" :class="{'mdl-tabs__tab--active' : activeOption == 3 }">Wind</div>
+            <div class="mdl-tabs__tab" @click="activeOption = 4" :class="{'mdl-tabs__tab--active' : activeOption == 4 }">Graphs</div>
+          </nav>
         </div>
       </div>
     </div>
@@ -39,7 +52,9 @@ export default {
   props: ['city'],
   data () {
     return {
-      weatherData: ''
+      weatherData: '',
+      formattedTodayTime: [],
+      activeOption: 1
     }
   },
   methods: {
@@ -56,6 +71,55 @@ export default {
     setWeather () {
       this.getWeather().then(data => {
         this.weatherData = data
+        this.weatherData.hourly = this.weatherData.hourly.slice(0, 24)
+        for (let i = 0; i < 24; i++) {
+          var todayTime = new Date(data.hourly[i].dt * 1000)
+          var todayTimeMonth = todayTime.getMonth()
+          switch (todayTimeMonth) {
+            case 1:
+              todayTimeMonth = 'January'
+              break
+            case 2:
+              todayTimeMonth = 'February'
+              break
+            case 3:
+              todayTimeMonth = 'March'
+              break
+            case 4:
+              todayTimeMonth = 'April'
+              break
+            case 5:
+              todayTimeMonth = 'May'
+              break
+            case 6:
+              todayTimeMonth = 'June'
+              break
+            case 7:
+              todayTimeMonth = 'July'
+              break
+            case 8:
+              todayTimeMonth = 'August'
+              break
+            case 9:
+              todayTimeMonth = 'September'
+              break
+            case 10:
+              todayTimeMonth = 'October'
+              break
+            case 11:
+              todayTimeMonth = 'November'
+              break
+            case 12:
+              todayTimeMonth = 'December'
+              break
+          }
+
+          var todayTimeDay = todayTime.getDate()
+          var todayTimeHours = todayTime.getHours()
+          var todayTimeMinutes = '0' + todayTime.getMinutes()
+          this.formattedTodayTime[i] = todayTimeMonth + ' ' + todayTimeDay + ' - ' + todayTimeHours + ':' + todayTimeMinutes.substr(-2)
+        }
+        console.log(this.formattedTodayTime)
       })
     },
     refreshMDL () {
@@ -112,8 +176,65 @@ export default {
   &__settings {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     width: 20%;
+    margin-left: 1rem;
+    border-left: 1px solid #fff;
+
+    .mdl-tabs--today {
+      display: flex;
+      flex-direction: column;
+      height: auto;
+      width: 100%;
+      border-bottom: none;
+      margin-left: -1px;
+
+      .mdl-tabs__tab {
+        width: 100%;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 800;
+        padding: 0;
+        border: 1px solid #fff;
+        border-left: none;
+        border-bottom: none;
+        transition: all 0.15s cubic-bezier(.4,0,1,1);
+        cursor: pointer;
+
+        &:last-of-type {
+          border-bottom: 1px solid #fff;
+        }
+
+        &::after {
+          height: 0%;
+          width: 2px;
+          display: block;
+          content: " ";
+          bottom: 50%;
+          left: 0;
+          position: absolute;
+          background: rgb(0,188,212);
+          transition: all 0.15s cubic-bezier(.4,0,1,1);
+        }
+
+        &--active {
+          color: #fff;
+          background-color: rgba(255, 255, 255, 0.25);
+
+          &::after {
+            height: 100%;
+            width: 2px;
+            display: block;
+            content: " ";
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            background: rgb(0,188,212);
+          }
+        }
+      }
+
+    }
   }
 
   &__cards {
@@ -126,7 +247,7 @@ export default {
       display: flex;
       flex-direction: row;
       width: 100%;
-      height: 50px;
+      height: auto;
       min-height: 50px;
       margin-bottom: 10px;
 
@@ -139,6 +260,16 @@ export default {
         background-size: cover;
         background-repeat: no-repeat;
         width: 200px;
+      }
+
+      &__supporting-text {
+        display: flex;
+        align-items: center;
+
+        p {
+          margin-right: 15px;
+          margin-bottom: 0;
+        }
       }
     }
   }
