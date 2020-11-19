@@ -12,22 +12,29 @@
             <div class="mdl-card mdl-shadow--2dp" v-if="(index % 2 == 0)">
               <div class="mdl-card__title mdl-card--expand" :style="{ backgroundImage: 'url(' + require('@/assets/images/' + hour.weather[0].icon + '.jpg') + ')' }">
               </div>
+                <transition name="change" mode="out-in">
                 <div class="mdl-card__supporting-text" v-if="activeOption == 1">
                     <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
-                    <p>Temperature: <strong>{{ hour.temp }}</strong></p>
-                    <p>Feels like: <strong>{{ hour.feels_like }}</strong></p>
+                    <p>Temperature: <br><strong>{{ hour.temp }}</strong></p>
+                    <p>Feels like: <br><strong>{{ hour.feels_like }}</strong></p>
                 </div>
+                </transition>
+                <transition name="change" mode="out-in">
                 <div class="mdl-card__supporting-text" v-if="activeOption == 2">
                     <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
-                    <p>Pressure: <strong>{{ hour.pressure }}</strong></p>
-                    <p>Humidity: <strong>{{ hour.humidity }}</strong></p>
+                    <p>Pressure: <br><strong>{{ hour.pressure }}</strong></p>
+                    <p>Humidity: <br><strong>{{ hour.humidity }}</strong></p>
+                    <p>Wind: <br><strong>{{ hour.wind_speed }}</strong></p>
                 </div>
+                </transition>
+                <transition name="change" mode="out-in">
                 <div class="mdl-card__supporting-text" v-if="activeOption == 3">
                     <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
-                    <p>Wind speed: <strong>{{ hour.wind_speed }}</strong></p>
-                    <p>Rain: <strong>{{ hour.rain }}</strong></p>
-                    <p>Clouds: <strong>{{ hour.humidity }}</strong></p>
+                    <p>Clouds: <br><strong>{{ hour.humidity }}</strong></p>
+                    <p v-for="(rain, index) in hour.rain" :key="index">Rain: <br><strong>{{ rain }}</strong></p>
+                    <p v-for="(snow, index) in hour.snow" :key="index">Snow: <br><strong>{{ snow }}</strong></p>
                 </div>
+                </transition>
             </div>
           </section>
         </div>
@@ -35,7 +42,7 @@
           <nav class="mdl-tabs__tab-bar mdl-tabs--today">
             <div class="mdl-tabs__tab" @click="activeOption = 1" :class="{'mdl-tabs__tab--active' : activeOption == 1 }">Temperature</div>
             <div class="mdl-tabs__tab" @click="activeOption = 2" :class="{'mdl-tabs__tab--active' : activeOption == 2 }">Air</div>
-            <div class="mdl-tabs__tab" @click="activeOption = 3" :class="{'mdl-tabs__tab--active' : activeOption == 3 }">Wind</div>
+            <div class="mdl-tabs__tab" @click="activeOption = 3" :class="{'mdl-tabs__tab--active' : activeOption == 3 }">Rain / snow</div>
             <div class="mdl-tabs__tab" @click="activeOption = 4" :class="{'mdl-tabs__tab--active' : activeOption == 4 }">Graphs</div>
           </nav>
         </div>
@@ -265,13 +272,41 @@ export default {
       &__supporting-text {
         display: flex;
         align-items: center;
+        min-height: 50px;
 
         p {
-          margin-right: 15px;
+          width: 20%;
+          text-align: center;
+          padding-right: 12px;
+          margin-right: 12px;
           margin-bottom: 0;
+          border-right: 1px solid rgb(152, 152, 152);
+
+          &:last-of-type {
+            border-right: none;
+          }
         }
       }
     }
   }
+}
+
+.change-enter-active,
+.change-leave-active {
+  transition-duration: 10.25s;
+  transition-property: all;
+  transition-timing-function: ease-in;
+}
+
+.change-enter-active {
+  transition-delay: 5s;
+}
+
+.change-enter-from,
+.change-enter,
+.change-leave-active {
+  display: none;
+  opacity: 0;
+  transform: none;
 }
 </style>
