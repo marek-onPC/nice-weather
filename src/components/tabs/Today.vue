@@ -15,7 +15,7 @@
                 <transition name="change" mode="out-in">
                 <div class="mdl-card__supporting-text" v-if="activeOption == 1">
                     <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
-                    <p>Temperature: <br><strong>{{ hour.temp }}</strong></p>
+                    <p>Temp: <br><strong>{{ hour.temp }}</strong></p>
                     <p>Feels like: <br><strong>{{ hour.feels_like }}</strong></p>
                 </div>
                 </transition>
@@ -29,6 +29,14 @@
                 </transition>
                 <transition name="change" mode="out-in">
                 <div class="mdl-card__supporting-text" v-if="activeOption == 3">
+                    <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
+                    <p>Clouds: <br><strong>{{ hour.humidity }}</strong></p>
+                    <p v-for="(rain, index) in hour.rain" :key="index">Rain: <br><strong>{{ rain }}</strong></p>
+                    <p v-for="(snow, index) in hour.snow" :key="index">Snow: <br><strong>{{ snow }}</strong></p>
+                </div>
+                </transition>
+                <transition name="change" mode="out-in">
+                <div class="mdl-card__supporting-text" v-if="activeOption == 4">
                     <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
                     <p>Clouds: <br><strong>{{ hour.humidity }}</strong></p>
                     <p v-for="(rain, index) in hour.rain" :key="index">Rain: <br><strong>{{ rain }}</strong></p>
@@ -177,24 +185,41 @@ export default {
 
   &__inner {
     display: flex;
-    flex-direction: row;
+    flex-direction: column-reverse;
+
+    @media (min-width: 992px) {
+      flex-direction: row;
+    }
   }
 
   &__settings {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 20%;
-    margin-left: 1rem;
-    border-left: 1px solid #fff;
+    width: 100%;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #fff;
+
+    @media (min-width: 992px) {
+      width: 20%;
+      margin-left: 10px;
+      border-bottom: none;
+      border-left: 1px solid #fff;
+    }
 
     .mdl-tabs--today {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       height: auto;
       width: 100%;
       border-bottom: none;
-      margin-left: -1px;
+
+      @media (min-width: 992px) {
+        flex-direction: column;
+        margin-top: 50px;
+        margin-left: -1px;
+
+      }
 
       .mdl-tabs__tab {
         width: 100%;
@@ -248,15 +273,25 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 80%;
+    width: 100%;
+
+    @media (min-width: 992px) {
+      width: 80%;
+    }
 
     .mdl-card {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       width: 100%;
       height: auto;
-      min-height: 50px;
+      max-height: 157px;
       margin-bottom: 10px;
+
+      @media (min-width: 992px) {
+        min-height: 50px;
+        max-height: 82px;
+        flex-direction: row;
+      }
 
       &-today-card-square {
         width: 100%;
@@ -266,13 +301,25 @@ export default {
         background-position: center;
         background-size: cover;
         background-repeat: no-repeat;
-        width: 200px;
+        min-width: 23%;
+        height: 118px;
+        min-height: 118px;
+
+        @media (min-width: 992px) {
+          height: auto;
+        }
       }
 
       &__supporting-text {
         display: flex;
         align-items: center;
         min-height: 50px;
+        max-height: 82px;
+        width: calc(100% - 32px);
+
+        @media (min-width: 992px) {
+         min-width: 75%;
+        }
 
         p {
           width: 20%;
@@ -291,22 +338,24 @@ export default {
   }
 }
 
-.change-enter-active,
-.change-leave-active {
-  transition-duration: 10.25s;
-  transition-property: all;
-  transition-timing-function: ease-in;
+.change-enter-from,
+.change-enter {
+  opacity: 0;
+  transform: none;
 }
 
 .change-enter-active {
-  transition-delay: 5s;
+  transition-duration: 0.5s;
+  transition-property: all;
+  transition-timing-function: ease-in-out;
 }
 
-.change-enter-from,
-.change-enter,
 .change-leave-active {
-  display: none;
-  opacity: 0;
-  transform: none;
+  display: inline-block;
+  width: 0px;
+  height: 0px;
+  transition-duration: 0s;
+  transition-property: all;
+  transition-timing-function: ease-in;
 }
 </style>

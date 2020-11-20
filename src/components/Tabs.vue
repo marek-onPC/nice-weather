@@ -59,8 +59,12 @@ export default {
 
   &__panel {
     min-height: 550px;
-    padding: 35px 50px;
+    padding: 35px 10px;
     background-color: rgba(255, 255, 255, 0.7);
+
+    @media (min-width: 992px) {
+      padding: 35px 50px;
+    }
 
     ul, ol {
       margin: 0;
