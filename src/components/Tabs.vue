@@ -2,7 +2,7 @@
 <div class="mdl-tabs">
   <nav class="mdl-tabs__tab-bar">
     <router-link to="/" class="mdl-tabs__tab">Now</router-link>
-    <router-link to="today" class="mdl-tabs__tab">Today</router-link>
+    <router-link to="twenty-four" class="mdl-tabs__tab">24 hours</router-link>
     <router-link to="tomorrow" class="mdl-tabs__tab">Tomorrow</router-link>
     <router-link to="sevendays" class="mdl-tabs__tab">Next seven days</router-link>
   </nav>

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="weather-today__outer">
+    <div class="loading-screen" v-if="weatherData === ''">
+      <div class="mdl-spinner mdl-js-spinner is-active"></div>
+    </div>
+    <main class="weather-today__outer" v-if="weatherData !== ''">
       <div class="weather-today__title">
         <h2>{{ city[0] }}</h2>
         <p>Lat: {{ city[1] }}</p>
@@ -15,32 +18,32 @@
                 <transition name="change" mode="out-in">
                 <div class="mdl-card__supporting-text" v-if="activeOption == 1">
                     <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
-                    <p>Temp: <br><strong>{{ hour.temp }}</strong></p>
-                    <p>Feels like: <br><strong>{{ hour.feels_like }}</strong></p>
+                    <p>Temp: <br><strong>{{ hour.temp }} °C</strong></p>
+                    <p>Feels like: <br><strong>{{ hour.feels_like }} °C</strong></p>
                 </div>
                 </transition>
                 <transition name="change" mode="out-in">
                 <div class="mdl-card__supporting-text" v-if="activeOption == 2">
                     <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
-                    <p>Pressure: <br><strong>{{ hour.pressure }}</strong></p>
-                    <p>Humidity: <br><strong>{{ hour.humidity }}</strong></p>
-                    <p>Wind: <br><strong>{{ hour.wind_speed }}</strong></p>
+                    <p>Pressure: <br><strong>{{ hour.pressure }} hPa</strong></p>
+                    <p>Humidity: <br><strong>{{ hour.humidity }} %</strong></p>
+                    <p>Wind: <br><strong>{{ hour.wind_speed }} m/s</strong></p>
                 </div>
                 </transition>
                 <transition name="change" mode="out-in">
                 <div class="mdl-card__supporting-text" v-if="activeOption == 3">
                     <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
-                    <p>Clouds: <br><strong>{{ hour.humidity }}</strong></p>
-                    <p v-for="(rain, index) in hour.rain" :key="index">Rain: <br><strong>{{ rain }}</strong></p>
-                    <p v-for="(snow, index) in hour.snow" :key="index">Snow: <br><strong>{{ snow }}</strong></p>
+                    <p>Clouds: <br><strong>{{ hour.clouds }} %</strong></p>
+                    <p v-for="(rain, index) in hour.rain" :key="index">Rain: <br><strong>{{ rain }} mm</strong></p>
+                    <p v-for="(snow, index) in hour.snow" :key="index">Snow: <br><strong>{{ snow }} mm</strong></p>
                 </div>
                 </transition>
                 <transition name="change" mode="out-in">
                 <div class="mdl-card__supporting-text" v-if="activeOption == 4">
                     <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
                     <p>Clouds: <br><strong>{{ hour.humidity }}</strong></p>
-                    <p v-for="(rain, index) in hour.rain" :key="index">Rain: <br><strong>{{ rain }}</strong></p>
-                    <p v-for="(snow, index) in hour.snow" :key="index">Snow: <br><strong>{{ snow }}</strong></p>
+                    <p v-for="(rain, index) in hour.rain" :key="index">Rain: <br><strong>{{ rain }} mm</strong></p>
+                    <p v-for="(snow, index) in hour.snow" :key="index">Snow: <br><strong>{{ snow }} mm</strong></p>
                 </div>
                 </transition>
             </div>
@@ -48,22 +51,23 @@
         </div>
         <div class="weather-today__settings">
           <nav class="mdl-tabs__tab-bar mdl-tabs--today">
-            <div class="mdl-tabs__tab" @click="activeOption = 1" :class="{'mdl-tabs__tab--active' : activeOption == 1 }">Temperature</div>
+            <div class="mdl-tabs__tab" @click="activeOption = 1" :class="{'mdl-tabs__tab--active' : activeOption == 1 }">Temp</div>
             <div class="mdl-tabs__tab" @click="activeOption = 2" :class="{'mdl-tabs__tab--active' : activeOption == 2 }">Air</div>
-            <div class="mdl-tabs__tab" @click="activeOption = 3" :class="{'mdl-tabs__tab--active' : activeOption == 3 }">Rain / snow</div>
+            <div class="mdl-tabs__tab" @click="activeOption = 3" :class="{'mdl-tabs__tab--active' : activeOption == 3 }"><small>Rain/snow</small></div>
             <div class="mdl-tabs__tab" @click="activeOption = 4" :class="{'mdl-tabs__tab--active' : activeOption == 4 }">Graphs</div>
           </nav>
         </div>
       </div>
-    </div>
+    </main>
   </div>
 </template>
 
 <script>
+import debounce from 'lodash.debounce'
 const axios = require('axios').default
 
 export default {
-  name: 'Now',
+  name: 'TwentyFour',
   props: ['city'],
   data () {
     return {
@@ -81,60 +85,63 @@ export default {
         })
         .catch(function (error) {
           console.log(error)
+          debounce(function () {
+            this.setWeather()
+          }, 500)
         })
     },
     setWeather () {
       this.getWeather().then(data => {
-        this.weatherData = data
-        this.weatherData.hourly = this.weatherData.hourly.slice(0, 24)
-        for (let i = 0; i < 24; i++) {
-          var todayTime = new Date(data.hourly[i].dt * 1000)
-          var todayTimeMonth = todayTime.getMonth()
-          switch (todayTimeMonth) {
-            case 1:
-              todayTimeMonth = 'January'
-              break
-            case 2:
-              todayTimeMonth = 'February'
-              break
-            case 3:
-              todayTimeMonth = 'March'
-              break
-            case 4:
-              todayTimeMonth = 'April'
-              break
-            case 5:
-              todayTimeMonth = 'May'
-              break
-            case 6:
-              todayTimeMonth = 'June'
-              break
-            case 7:
-              todayTimeMonth = 'July'
-              break
-            case 8:
-              todayTimeMonth = 'August'
-              break
-            case 9:
-              todayTimeMonth = 'September'
-              break
-            case 10:
-              todayTimeMonth = 'October'
-              break
-            case 11:
-              todayTimeMonth = 'November'
-              break
-            case 12:
-              todayTimeMonth = 'December'
-              break
+        if (data) {
+          this.weatherData = data
+          this.weatherData.hourly = this.weatherData.hourly.slice(0, 24)
+          for (let i = 0; i < 24; i++) {
+            var todayTime = new Date(data.hourly[i].dt * 1000 + data.timezone_offset * 1000)
+            var todayTimeMonth = todayTime.getMonth()
+            switch (todayTimeMonth) {
+              case 0:
+                todayTimeMonth = 'January'
+                break
+              case 1:
+                todayTimeMonth = 'February'
+                break
+              case 2:
+                todayTimeMonth = 'March'
+                break
+              case 3:
+                todayTimeMonth = 'April'
+                break
+              case 4:
+                todayTimeMonth = 'May'
+                break
+              case 5:
+                todayTimeMonth = 'June'
+                break
+              case 6:
+                todayTimeMonth = 'July'
+                break
+              case 7:
+                todayTimeMonth = 'August'
+                break
+              case 8:
+                todayTimeMonth = 'September'
+                break
+              case 9:
+                todayTimeMonth = 'October'
+                break
+              case 10:
+                todayTimeMonth = 'November'
+                break
+              case 11:
+                todayTimeMonth = 'December'
+                break
+            }
+            var todayTimeDay = todayTime.getDate()
+            var todayTimeHours = todayTime.getHours()
+            var todayTimeMinutes = '0' + todayTime.getMinutes()
+            this.formattedTodayTime[i] = todayTimeMonth + ' ' + todayTimeDay + ' - ' + todayTimeHours + ':' + todayTimeMinutes.substr(-2)
           }
-
-          var todayTimeDay = todayTime.getDate()
-          var todayTimeHours = todayTime.getHours()
-          var todayTimeMinutes = '0' + todayTime.getMinutes()
-          this.formattedTodayTime[i] = todayTimeMonth + ' ' + todayTimeDay + ' - ' + todayTimeHours + ':' + todayTimeMinutes.substr(-2)
         }
-        console.log(this.formattedTodayTime)
       })
     },
     refreshMDL () {
@@ -158,6 +165,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.loading-screen {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+}
+
 .weather-today {
   &__title {
     display: flex;
@@ -228,7 +241,7 @@ export default {
         font-weight: 800;
         padding: 0;
         border: 1px solid #fff;
-        border-left: none;
+        // border-left: none;
         border-bottom: none;
         transition: all 0.15s cubic-bezier(.4,0,1,1);
         cursor: pointer;
@@ -283,13 +296,12 @@ export default {
       display: flex;
       flex-direction: column;
       width: 100%;
-      height: auto;
-      max-height: 157px;
-      margin-bottom: 10px;
+      min-height: 137px;
+      max-height: 137px;
+      margin-bottom: 20px;
 
       @media (min-width: 992px) {
         min-height: 50px;
-        max-height: 82px;
         flex-direction: row;
       }
 
@@ -301,9 +313,8 @@ export default {
         background-position: center;
         background-size: cover;
         background-repeat: no-repeat;
-        min-width: 23%;
-        height: 118px;
-        min-height: 118px;
+        min-width: 25.5%;
+        min-height: 80px;
 
         @media (min-width: 992px) {
           height: auto;
@@ -315,19 +326,28 @@ export default {
         align-items: center;
         min-height: 50px;
         max-height: 82px;
-        width: calc(100% - 32px);
+        width: auto;
+        padding: 12px 0px;
 
         @media (min-width: 992px) {
          min-width: 75%;
+         padding: 16px;
         }
 
         p {
-          width: 20%;
+          width: 25%;
           text-align: center;
-          padding-right: 12px;
-          margin-right: 12px;
+          font-size: 12px;
+          line-height: 16px;
+          padding: 0 12px;
+          // margin: 0 6px;
           margin-bottom: 0;
           border-right: 1px solid rgb(152, 152, 152);
+
+          @media (min-width: 768px) {
+            font-size: 14px;
+            line-height: 24px;
+          }
 
           &:last-of-type {
             border-right: none;
@@ -351,11 +371,6 @@ export default {
 }
 
 .change-leave-active {
-  display: inline-block;
-  width: 0px;
-  height: 0px;
-  transition-duration: 0s;
-  transition-property: all;
-  transition-timing-function: ease-in;
+  display: none!important;
 }
 </style>

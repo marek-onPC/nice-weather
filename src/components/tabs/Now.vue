@@ -1,6 +1,9 @@
 <template>
   <div>
-    <main class="weather-now__outer">
+    <div class="loading-screen" v-if="weatherData === ''">
+      <div class="mdl-spinner mdl-js-spinner is-active"></div>
+    </div>
+    <main class="weather-now__outer" v-if="weatherData !== ''">
       <div class="weather-now__wrapper-left">
         <div class="weather-now__title">
           <h2>{{ city[0] }}</h2>
@@ -9,7 +12,6 @@
         </div>
         <div class="weather-card-image mdl-card mdl-shadow--2dp">
           <div class="mdl-card__title mdl-card--expand" :style="{ backgroundImage: 'url(' + require('@/assets/images/' + weatherData.weather[0].icon + '.jpg') + ')' }">
-            <!-- <img v-if="weatherData.weather[0].icon !== ''" :src="'http://openweathermap.org/img/wn/' +  weatherData.weather[0].icon + '@2x.png'" alt=""> -->
           </div>
           <div class="mdl-card__actions">
             <span class="weather-card-image__filename">
@@ -37,14 +39,11 @@
         </div>
       </div>
     </main>
-    <div class="weather-now__maps">
-    </div>
   </div>
 </template>
 
 <script>
 import debounce from 'lodash.debounce'
-
 const axios = require('axios').default
 
 export default {
@@ -52,24 +51,7 @@ export default {
   props: ['city'],
   data () {
     return {
-      weatherData: {
-        weather: [
-          {
-            icon: '01d',
-            description: ''
-          }
-        ],
-        main: {
-          temp: '',
-          feels_like: '',
-          humidity: '',
-          pressure: ''
-        },
-        wind: {
-          speed: ''
-        },
-        timezone: ''
-      },
+      weatherData: '',
       formattedCurrentTime: ''
     }
   },
@@ -82,16 +64,26 @@ export default {
         })
         .catch(function (error) {
           console.log(error)
+          debounce(function () {
+            this.setWeather()
+          }, 500)
         })
     },
     setWeather () {
       this.getWeather().then(data => {
-        this.weatherData = data
-        var currentTime = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60000 + data.timezone * 1000)
-        var currentTimeHours = currentTime.getHours()
-        var currentTimeMinutes = '0' + currentTime.getMinutes()
-        this.formattedCurrentTime = currentTimeHours + ':' + currentTimeMinutes.substr(-2)
+        if (data) {
+          this.weatherData = data
+          var currentTime = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60000 + data.timezone * 1000)
+          var currentTimeHours = currentTime.getHours()
+          var currentTimeMinutes = '0' + currentTime.getMinutes()
+          this.formattedCurrentTime = currentTimeHours + ':' + currentTimeMinutes.substr(-2)
+        }
       })
+    },
+    refreshMDL () {
+      if (typeof componentHandler !== 'undefined') {
+        window.componentHandler.upgradeAllRegistered()
+      }
     }
   },
   created () {
@@ -101,11 +93,20 @@ export default {
     city: debounce(function () {
       this.setWeather()
     }, 500)
+  },
+  mounted () {
+    this.refreshMDL()
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.loading-screen {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+}
+
 .weather-now {
   &__outer {
     display: flex;
