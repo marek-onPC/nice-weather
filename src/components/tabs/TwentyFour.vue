@@ -38,14 +38,14 @@
                     <p v-for="(snow, index) in hour.snow" :key="index">Snow: <br><strong>{{ snow }} mm</strong></p>
                 </div>
                 </transition>
-                <transition name="change" mode="out-in">
+                <!-- <transition name="change" mode="out-in">
                 <div class="mdl-card__supporting-text" v-if="activeOption == 4">
                     <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
                     <p>Clouds: <br><strong>{{ hour.humidity }}</strong></p>
                     <p v-for="(rain, index) in hour.rain" :key="index">Rain: <br><strong>{{ rain }} mm</strong></p>
                     <p v-for="(snow, index) in hour.snow" :key="index">Snow: <br><strong>{{ snow }} mm</strong></p>
                 </div>
-                </transition>
+                </transition> -->
             </div>
           </section>
         </div>
@@ -54,7 +54,7 @@
             <div class="mdl-tabs__tab" @click="activeOption = 1" :class="{'mdl-tabs__tab--active' : activeOption == 1 }">Temp</div>
             <div class="mdl-tabs__tab" @click="activeOption = 2" :class="{'mdl-tabs__tab--active' : activeOption == 2 }">Air</div>
             <div class="mdl-tabs__tab" @click="activeOption = 3" :class="{'mdl-tabs__tab--active' : activeOption == 3 }"><small>Rain/snow</small></div>
-            <div class="mdl-tabs__tab" @click="activeOption = 4" :class="{'mdl-tabs__tab--active' : activeOption == 4 }">Graphs</div>
+            <!-- <div class="mdl-tabs__tab" @click="activeOption = 4" :class="{'mdl-tabs__tab--active' : activeOption == 4 }">Graphs</div> -->
           </nav>
         </div>
       </div>
@@ -87,7 +87,7 @@ export default {
           console.log(error)
           debounce(function () {
             this.setWeather()
-          }, 500)
+          }, 250)
         })
     },
     setWeather () {
