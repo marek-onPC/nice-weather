@@ -31,7 +31,7 @@
                 </div>
                 </transition>
                 <transition name="change" mode="out-in">
-                <div class="mdl-card__supporting-text" v-if="activeOption == 3">
+                <div class="mdl-card__supporting-text --rain" v-if="activeOption == 3">
                     <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
                     <p>Clouds: <br><strong>{{ hour.clouds }} %</strong></p>
                     <p v-for="(rain, index) in hour.rain" :key="index">Rain: <br><strong>{{ rain }} mm</strong></p>
@@ -297,7 +297,7 @@ export default {
       flex-direction: column;
       width: 100%;
       min-height: 137px;
-      max-height: 137px;
+      max-height: none;
       margin-bottom: 20px;
 
       @media (min-width: 992px) {
@@ -324,8 +324,8 @@ export default {
       &__supporting-text {
         display: flex;
         align-items: center;
-        min-height: 50px;
-        max-height: 82px;
+        min-height: 82px;
+        max-height: none;
         width: auto;
         padding: 12px 0px;
 
@@ -334,13 +334,23 @@ export default {
          padding: 16px;
         }
 
+        &.--rain {
+          p {
+            width: 33%;
+          }
+        }
+
         p {
-          width: 25%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          height: 100%;
+          width: 100%;
           text-align: center;
           font-size: 12px;
           line-height: 16px;
           padding: 0 12px;
-          // margin: 0 6px;
           margin-bottom: 0;
           border-right: 1px solid rgb(152, 152, 152);
 
