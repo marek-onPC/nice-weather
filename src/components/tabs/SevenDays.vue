@@ -18,26 +18,26 @@
                 <transition name="change" mode="out-in">
                 <div class="mdl-card__supporting-text" v-if="activeOption == 1">
                     <p class="--date"><strong>{{ formattedTodayTime[index] }}</strong></p>
-                    <p class="--description"><strong>{{ day.weather.description }}</strong></p>
-                    <div class="mdl-card__content">
+                    <p class="--description"><strong>{{ day.weather[0].description }}</strong></p>
+                    <div class="mdl-card__temperature">
                       <h5><strong>Temp:</strong></h5>
-                      <div class="mdl-card__content-text"><small>morning: </small><strong>{{ day.temp.morn }} °C</strong></div>
-                      <div class="mdl-card__content-text"><small>day: </small><strong>{{ day.temp.day }} °C</strong></div>
-                      <div class="mdl-card__content-text"><small>evening: </small><strong>{{ day.temp.eve }} °C</strong></div>
-                      <div class="mdl-card__content-text"><small>night: </small><strong>{{ day.temp.night }} °C</strong></div>
+                      <div class="mdl-card__temperature-text"><small>morning: </small><strong>{{ day.temp.morn }} °C</strong></div>
+                      <div class="mdl-card__temperature-text"><small>day: </small><strong>{{ day.temp.day }} °C</strong></div>
+                      <div class="mdl-card__temperature-text"><small>evening: </small><strong>{{ day.temp.eve }} °C</strong></div>
+                      <div class="mdl-card__temperature-text"><small>night: </small><strong>{{ day.temp.night }} °C</strong></div>
                     </div>
-                    <div class="mdl-card__content">
+                    <div class="mdl-card__temperature">
                       <h5><strong>Feels like:</strong></h5>
-                      <div class="mdl-card__content-text"><small>morning: </small><strong>{{ day.feels_like.morn }} °C</strong></div>
-                      <div class="mdl-card__content-text"><small>day: </small><strong>{{ day.feels_like.day }} °C</strong></div>
-                      <div class="mdl-card__content-text"><small>evening: </small><strong>{{ day.feels_like.eve }} °C</strong></div>
-                      <div class="mdl-card__content-text"><small>night: </small><strong>{{ day.feels_like.night }} °C</strong></div>
+                      <div class="mdl-card__temperature-text"><small>morning: </small><strong>{{ day.feels_like.morn }} °C</strong></div>
+                      <div class="mdl-card__temperature-text"><small>day: </small><strong>{{ day.feels_like.day }} °C</strong></div>
+                      <div class="mdl-card__temperature-text"><small>evening: </small><strong>{{ day.feels_like.eve }} °C</strong></div>
+                      <div class="mdl-card__temperature-text"><small>night: </small><strong>{{ day.feels_like.night }} °C</strong></div>
                     </div>
                 </div>
                 </transition>
                 <transition name="change" mode="out-in">
-                <div class="mdl-card__supporting-text" v-if="activeOption == 2">
-                    <p><strong>{{ formattedTodayTime[index] }}</strong></p>
+                <div class="mdl-card__supporting-text --air" v-if="activeOption == 2">
+                    <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
                     <p>Pressure: <br><strong>{{ day.pressure }} hPa</strong></p>
                     <p>Humidity: <br><strong>{{ day.humidity }} %</strong></p>
                     <p>Wind: <br><strong>{{ day.wind_speed }} m/s</strong></p>
@@ -45,7 +45,7 @@
                 </transition>
                 <transition name="change" mode="out-in">
                 <div class="mdl-card__supporting-text --rain" v-if="activeOption == 3">
-                    <p><strong>{{ formattedTodayTime[index] }}</strong></p>
+                    <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
                     <p>Clouds: <br><strong>{{ day.clouds }} %</strong></p>
                     <p v-for="(rain, index) in day.rain" :key="index">Rain: <br><strong>{{ rain }} mm</strong></p>
                     <p v-for="(snow, index) in day.snow" :key="index">Snow: <br><strong>{{ snow }} mm</strong></p>
@@ -107,8 +107,7 @@ export default {
       this.getWeather().then(data => {
         if (data) {
           this.weatherData = data
-          this.weatherData.daily = this.weatherData.daily.slice(0, 24)
-          for (let i = 0; i < 24; i++) {
+          for (let i = 0; i < 8; i++) {
             var weekTime = new Date(data.daily[i].dt * 1000 + data.timezone_offset * 1000)
             var weekTimeMonth = weekTime.getMonth()
             switch (weekTimeMonth) {
@@ -346,19 +345,34 @@ export default {
          padding: 16px;
         }
 
+        p {
+          width: 25%;
+        }
+
         &.--rain {
           p {
             width: 33%;
           }
         }
 
-        p, .mdl-card__content {
+        &.--air {
+          p {
+            width: 25%;
+          }
+        }
+
+        .--date, .--description {
+          width: 100%;
+          border: none;
+          text-transform: capitalize;
+          margin-bottom: 10px;
+        }
+
+        p {
           display: flex;
           justify-content: center;
           align-items: center;
           flex-direction: column;
-          // height: 100%;
-          width: 50%;
           text-align: center;
           font-size: 12px;
           line-height: 16px;
@@ -371,21 +385,44 @@ export default {
             line-height: 24px;
           }
 
-          &.--date, &.--description {
-            width: 100%;
-          }
-
           &:last-of-type {
             border-right: none;
           }
         }
       }
 
-      &__content-text {
+      &__temperature {
         display: flex;
-        justify-content: space-between;
-        max-width: 125px;
-        width: 100%;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        width: 50%;
+        font-size: 12px;
+        line-height: 16px;
+        padding: 0 12px;
+        margin-bottom: 0;
+        border-right: 1px solid rgb(152, 152, 152);
+
+        @media (min-width: 768px) {
+          font-size: 14px;
+          line-height: 24px;
+        }
+
+        &-text {
+          display: flex;
+          justify-content: space-between;
+          max-width: 125px;
+          width: 100%;
+        }
+
+        &:last-of-type {
+          border-right: none;
+        }
+
+        h5 {
+          margin-top: 10px;
+        }
       }
     }
   }
