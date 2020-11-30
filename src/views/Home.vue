@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     getVisitorData () {
-      return axios.get('https://api.ipstack.com/check?access_key=' + this.ipAPI)
+      return axios.get('https://freegeoip.app/json/')
         .then(function (response) {
           return response.data
         })
