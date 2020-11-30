@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     getVisitorData () {
-      return axios.get('http://api.ipstack.com/check?access_key=' + this.ipAPI)
+      return axios.get('https://api.ipstack.com/check?access_key=' + this.ipAPI)
         .then(function (response) {
           return response.data
         })
@@ -44,7 +44,7 @@ export default {
       })
     },
     getVisitorLatLon () {
-      return axios.get('http://api.openweathermap.org/data/2.5/weather?q=' + this.visitorCity + '&units=metric&appid=' + this.weatherAPI)
+      return axios.get('https://api.openweathermap.org/data/2.5/weather?q=' + this.visitorCity + '&units=metric&appid=' + this.weatherAPI)
         .then(function (response) {
           return response.data
         })
