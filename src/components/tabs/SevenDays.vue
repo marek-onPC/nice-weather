@@ -15,42 +15,42 @@
             <div class="mdl-card mdl-shadow--2dp">
               <div class="mdl-card__title mdl-card--expand" :style="{ backgroundImage: 'url(' + require('@/assets/images/' + day.weather[0].icon + '.jpg') + ')' }">
               </div>
-                <transition name="change" mode="out-in">
-                <div class="mdl-card__supporting-text" v-if="activeOption == 1">
-                    <p class="--date"><strong>{{ formattedTodayTime[index] }}</strong></p>
-                    <p class="--description"><strong>{{ day.weather[0].description }}</strong></p>
-                    <div class="mdl-card__temperature">
-                      <h5><strong>Temp:</strong></h5>
-                      <div class="mdl-card__temperature-text"><small>morning: </small><strong>{{ day.temp.morn }} °C</strong></div>
-                      <div class="mdl-card__temperature-text"><small>day: </small><strong>{{ day.temp.day }} °C</strong></div>
-                      <div class="mdl-card__temperature-text"><small>evening: </small><strong>{{ day.temp.eve }} °C</strong></div>
-                      <div class="mdl-card__temperature-text"><small>night: </small><strong>{{ day.temp.night }} °C</strong></div>
-                    </div>
-                    <div class="mdl-card__temperature">
-                      <h5><strong>Feels like:</strong></h5>
-                      <div class="mdl-card__temperature-text"><small>morning: </small><strong>{{ day.feels_like.morn }} °C</strong></div>
-                      <div class="mdl-card__temperature-text"><small>day: </small><strong>{{ day.feels_like.day }} °C</strong></div>
-                      <div class="mdl-card__temperature-text"><small>evening: </small><strong>{{ day.feels_like.eve }} °C</strong></div>
-                      <div class="mdl-card__temperature-text"><small>night: </small><strong>{{ day.feels_like.night }} °C</strong></div>
-                    </div>
+              <transition name="change" mode="out-in">
+              <div class="mdl-card__supporting-text" v-if="activeOption == 1">
+                <p class="--date"><strong>{{ formattedTodayTime[index] }}</strong></p>
+                <p class="--description"><strong>{{ day.weather[0].description }}</strong></p>
+                <div class="mdl-card__temperature">
+                  <h5><strong>Temp:</strong></h5>
+                  <div class="mdl-card__temperature-text"><small>morning: </small><strong>{{ day.temp.morn }} °C</strong></div>
+                  <div class="mdl-card__temperature-text"><small>day: </small><strong>{{ day.temp.day }} °C</strong></div>
+                  <div class="mdl-card__temperature-text"><small>evening: </small><strong>{{ day.temp.eve }} °C</strong></div>
+                  <div class="mdl-card__temperature-text"><small>night: </small><strong>{{ day.temp.night }} °C</strong></div>
                 </div>
-                </transition>
-                <transition name="change" mode="out-in">
-                <div class="mdl-card__supporting-text --air" v-if="activeOption == 2">
-                    <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
-                    <p>Pressure: <br><strong>{{ day.pressure }} hPa</strong></p>
-                    <p>Humidity: <br><strong>{{ day.humidity }} %</strong></p>
-                    <p>Wind: <br><strong>{{ day.wind_speed }} m/s</strong></p>
+                <div class="mdl-card__temperature">
+                  <h5><strong>Feels like:</strong></h5>
+                  <div class="mdl-card__temperature-text"><small>morning: </small><strong>{{ day.feels_like.morn }} °C</strong></div>
+                  <div class="mdl-card__temperature-text"><small>day: </small><strong>{{ day.feels_like.day }} °C</strong></div>
+                  <div class="mdl-card__temperature-text"><small>evening: </small><strong>{{ day.feels_like.eve }} °C</strong></div>
+                  <div class="mdl-card__temperature-text"><small>night: </small><strong>{{ day.feels_like.night }} °C</strong></div>
                 </div>
-                </transition>
-                <transition name="change" mode="out-in">
-                <div class="mdl-card__supporting-text --rain" v-if="activeOption == 3">
-                    <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
-                    <p>Clouds: <br><strong>{{ day.clouds }} %</strong></p>
-                    <p v-for="(rain, index) in day.rain" :key="index">Rain: <br><strong>{{ rain }} mm</strong></p>
-                    <p v-for="(snow, index) in day.snow" :key="index">Snow: <br><strong>{{ snow }} mm</strong></p>
-                </div>
-                </transition>
+              </div>
+              </transition>
+              <transition name="change" mode="out-in">
+              <div class="mdl-card__supporting-text --air" v-if="activeOption == 2">
+                <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
+                <p>Pressure: <br><strong>{{ day.pressure }} hPa</strong></p>
+                <p>Humidity: <br><strong>{{ day.humidity }} %</strong></p>
+                <p>Wind: <br><strong>{{ day.wind_speed }} m/s</strong></p>
+              </div>
+              </transition>
+              <transition name="change" mode="out-in">
+              <div class="mdl-card__supporting-text --rain" v-if="activeOption == 3">
+                <p><strong><small>{{ formattedTodayTime[index] }}</small></strong></p>
+                <p>Clouds: <br><strong>{{ day.clouds }} %</strong></p>
+                <p v-if="day.rain">Rain: <br><strong>{{ day.rain }} mm</strong></p>
+                <p v-if="day.snow">Snow: <br><strong>{{ day.snow }} mm</strong></p>
+              </div>
+              </transition>
             </div>
           </section>
         </div>
