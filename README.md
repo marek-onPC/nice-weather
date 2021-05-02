@@ -1,24 +1,8 @@
 # nice-weather
 
-## Project setup
+## Project info
 ```
-npm install
-```
+Built for educational purposes - during learing JavaScript framework Vue.js.
 
-### Compiles and hot-reloads for development
+GitHub page with [working APP](https://marek-onpc.github.io/nice-weather/).
 ```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
